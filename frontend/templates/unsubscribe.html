@@ -32,16 +32,16 @@
                         <h1 class="mb-5">
                             Enter your email in order to unsubscribe<br>
                         </h1>
-                        <form action="{{ url_for('scraped') }}" method="POST">
+                        <form action="{{ url_for('unsubscribe_action') }}" method="POST">
                             <div class="row">
                                 <div class="col">
-                                    <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
-                                    <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
+                                    <input class="form-control form-control-lg" id="emailAddress" type="email" name="email" placeholder="Email Address" data-sb-validations="required,email" />
+                                    <div class="invalid-feedback text-white" data-sb-feedback="email:required">Email Address is required.</div>
                                     <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div>
                                 </div>
-                                <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
-                            </div>    
-                        </form>
+                            </div>
+                            <div class="col-auto"><button class="btn btn-primary btn-lg enabled" id="submitButton" type="submit">Submit!</button></div>
+                            </form>
                         <!-- Submit success message-->
                         <!---->
                         <!-- This is what your users will see when the form-->

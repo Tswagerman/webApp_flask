@@ -38,6 +38,12 @@ def unsubscribe():
     print('Unsubscribe has been called')
     #implement some interaction between database and user.
     return render_template('unsubscribe.html')
+
+@app.route('/unsubscribed', methods=['GET', 'POST'])
+def unsubscribe_action():
+    email = request.form["email"]
+    print("unsubscribeMail = ", email)
+    return render_template('scraped.html')
     
 @app.route('/about')
 def about():

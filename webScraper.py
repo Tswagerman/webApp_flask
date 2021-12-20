@@ -38,13 +38,9 @@ class WebScraper:
 		seen = set() #Set to keep track of duplicate rows in csv file. 
 		if (path.exists("data\settings.csv")):
 			with open(savePath, 'a', newline='\n') as file: #Append the scraping info to an existing file
-				CSVdata = csv.reader(file, delimiter=',') 
-				for row in CSVdata:
-					if scraping_info == row:
-						print('Duplicate search. No need to add to settings')
-						file.close()
-					writer = csv.writer(file)
-					writer.writerow(scraping_info)
+				print('fix duplicates')
+				writer = csv.writer(file)
+				writer.writerow(scraping_info)
 		else:
 			with open(savePath, 'w', newline='\n') as file: #Create file and write to the new file
 				writer = csv.writer(file)
