@@ -28,33 +28,16 @@ class WebScraper:
 				print('sent notification')
 			except:
 				print('failed to send notification')
-		self.saveSettings()
 		self.saveHistory()
-
-	def saveSettings(self):
-		cwd = os.getcwd() #Current working directory
-		savePath = cwd + "\data\settings.csv"
-		scraping_info = (self.desired_Price, self.url, self.receiver_email)
-		seen = set() #Set to keep track of duplicate rows in csv file. 
-		if (path.exists("data\settings.csv")):
-			with open(savePath, 'a', newline='\n') as file: #Append the scraping info to an existing file
-				print('fix duplicates')
-				writer = csv.writer(file)
-				writer.writerow(scraping_info)
-		else:
-			with open(savePath, 'w', newline='\n') as file: #Create file and write to the new file
-				writer = csv.writer(file)
-				writer.writerow(scraping_info)
 		
 	def extractCurrentPrice(self):
 		page = requests.get(self.url) 
 		data = page.text
 		soup = BeautifulSoup(data, "html.parser")
-		#'currency':'DKK',
-		#First class found is the minimal price.
+		#'currency':'DKK', old attr that used to work for scraping the lowest price
+		#First class found is the minimal price. The lowest price is the first item found on the website with the corresponding attributes
 		data = soup.find('span', attrs={'class':'SnarOLmYcb Ci0mGVkzmW Fg7gKEY8SV eSiwcTiHBc css-d5txxz'})
 		print('data = ', data)
-		#The lowest price is the first item found on the website with the corresponding attributes
 		self.current_Price = data.text.strip() 
 		self.current_Price = re.sub(r'[aA-zZ]+', '', self.current_Price, re.I) 
 		self.current_Price = int(self.current_Price.replace(".", ""))	
@@ -62,8 +45,7 @@ class WebScraper:
 	def sendNotification(self, message):
 		port = 465  # For SSL
 		smtp_server = "smtp.gmail.com"
-		sender_email = "notifications.pricerunner.scrapy@gmail.com"  #Change this address to your own account. Because the program requires the password
-		#receiver_email = "devthomasswagerman@gmail.com"  # Enter receiver address
+		sender_email = "notifications.pricerunner.scrapy@gmail.com" 
 		context = ssl.create_default_context()
 		with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
 			self.login(sender_email, server)

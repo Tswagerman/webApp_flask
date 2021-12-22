@@ -1,8 +1,11 @@
+import os
 from flask import Flask, render_template
 from flask import url_for
 from flask import request
 from markupsafe import escape
 from webScraper import WebScraper
+
+import SQL
 
 STATIC_FOLDER = './frontend/static'
 TEMPLATE_FOLDER = './frontend/templates'
@@ -13,6 +16,13 @@ def do_the_login():
 
 def show_the_login_form():
 	return 'Get method'
+
+def saveSettings(price, url, email):
+    print('Saving settings')
+    cwd = os.getcwd() #Current working directory
+    savePath = cwd + "\data\settings.csv"
+    print('save settings')
+    SQL.add_userdata_outside(price, url, email)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -31,6 +41,7 @@ def scraped():
         print('except')
         return render_template('unsuccesfulScrape.html')
     webScraper = WebScraper(price, url, email)
+    saveSettings(price, url, email)
     return render_template('scraped.html')
 
 @app.route('/unsubscribe', methods=['GET', 'POST'])
@@ -49,21 +60,6 @@ def unsubscribe_action():
 def about():
     return render_template('about.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-	if request.method == 'POST':
-		return do_the_login()
-	else:
-		return show_the_login_form()
-
-@app.route('/user/<username>')
-def profile(username):
-    # show the user profile for that user
-    return f'User {escape(username)}'
-
-@app.route('/post/<int:post_id>')
-def show_post(post_id):
-	return f'Post with post id: {post_id}'
 
 with app.test_request_context():
     print(url_for('home'))

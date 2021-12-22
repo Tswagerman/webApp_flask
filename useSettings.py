@@ -1,25 +1,15 @@
 import csv
 import os
 
+import SQL
 from webScraper import WebScraper
 
 def usingSettings(path):
 	print('Opening file...')
-	with open(path) as csvFile:  
-		seen = set() #Set to keep track of duplicate rows in csv file.
-		CSVdata = csv.reader(csvFile, delimiter=',') 
-		for row in CSVdata:
-			row = tuple(row)
-			print('row = ', row, 'seen = ', seen)
-			if not len(seen) == 0 and row in seen: continue #Ignoring duplicates from settings
-			seen.add(row)
-			desired_Price, url, receiver_email = row[0], row[1], row[2]
-			webscraper = WebScraper(desired_Price, url, receiver_email)
-	csvFile.close()
-
-def checkDuplicates():
-	#implement 
-	pass
+	c = SQL.select_distinct_data()
+	for row in c:
+		desired_Price, url, receiver_email = row[0], row[1], row[2]
+		webscraper = WebScraper(desired_Price, url, receiver_email)
 
 if __name__ == '__main__':
 	#These preferences are saved in the '\data\settings.csv' file
